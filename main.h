@@ -116,7 +116,6 @@ int deadline(Task task) {
     return difference;
 }
 
-
 //Trier les tâches par deadline
 void deadline_sort(Task *T, int N){
 	int i,j;
@@ -143,28 +142,95 @@ void display_tasks_within_three_days(Task *T, int N){
 	}
 }
 
-//Modifier la description d'une tâche
-void edit_description(Task *T, int N){
-}
-
-//Modifier le statut d’une tâche
-void edit_statut(Task *T, int N){
-}
-
-//Modifier le deadline d’une tâche
-void edit_deadline(Task *T, int N){
-}
-
-//Supprimer une tâche par identifiant
-void delete_by_id(int id){
+//Rechercher une tâche par son Identifiant et retourner son indice
+int find_task(Task *T, int N, int id){
+	int i = 0;
+	while(i < N && id != T[i].Id_task){
+		i++;
+	}
+	if(i < N){
+		return i;
+	} else {
+		return -1;
+	}
 }
 
 //Rechercher une tâche par son Identifiant
-void search_by_id(Task *T, Task x){
+void search_by_id(Task *T, int N, int id){
+	int S = find_task(T, N, id);
+	if(S < N && S != -1){
+		show_task(T[S]);
+	} else{
+		printf("Tache non trouve!!");
+	}
 }
 
 //Rechercher une tâche par son Titre
-void search_by_title(Task *T, Task x){
+void search_by_title(Task *T, int N, char title[50]){
+	int i = 0;
+	while(i < N && strcmp(title, T[i].title) != 0){
+		i++;
+	}
+	if(i < N && i != -1){
+		show_task(T[i]);
+	} else{
+		printf("Tache non trouve!!");
+	}
+}
+
+//Modifier la description d'une tâche
+void edit_description(Task *T, int N, int id){
+	int S = find_task(T, N, id);
+    if (S < N && S != -1) {
+		char new_description[100];
+	    printf("Saisir la nouvelle description de la tache: ");
+	    getchar();
+	    gets(new_description);
+	    strcpy(T[S].description, new_description);
+    } else {
+        printf("Tache non trouve!!");
+    }
+}
+
+//Modifier le statut d’une tâche
+void edit_statut(Task *T, int N, int id){
+    int S = find_task(T, N, id);
+    if (S < N && S != -1) {
+        int new_statut;
+        printf("Saisir le nouveau statut de la tache: (0 pour A realiser, 1 pour en cours de realisation, 2 pour finalisee) ");
+        scanf("%d", &new_statut);
+        T[S].statut = (Statut)new_statut;
+    } else {
+        printf("Tache non trouve!!");
+    }
+}
+
+//Modifier le deadline d’une tâche
+void edit_deadline(Task *T, int N, int id){
+	int S = find_task(T, N, id);
+    if (S < N && S != -1) {
+        Date new_deadline;
+        printf("Saisir la nouvelle date de fin de la tache: (jj-mm-aaaa) ");
+        scanf("%d-%d-%d", &new_deadline.day, &new_deadline.month, &new_deadline.year);
+        T[S].end_date.day = new_deadline.day;
+        T[S].end_date.month = new_deadline.month;
+        T[S].end_date.year = new_deadline.year;
+    } else {
+        printf("Tache non trouve!!");
+    }
+}
+
+//Supprimer une tâche par identifiant
+void delete_by_id(Task *T, int N, int id_to_delete){
+    int S = find_task(T, N, id_to_delete);
+    int i;
+    if (S < N && S != -1) {
+        for(i = S; i < N; i++){
+        	T[i] = T[i+1];
+		}
+    } else {
+        printf("Tache non trouve!!");
+    }
 }
 
 //le nombre total des tâches
