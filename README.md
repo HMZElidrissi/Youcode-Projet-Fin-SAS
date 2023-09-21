@@ -13,7 +13,7 @@ L’application doit avoir un menu qui vous permet de :
 
 - Ajouter plusieurs nouvelles tâches.
 
- Afficher la liste de toutes les tâches (Identifiant, Titre, Description, Deadline, Statut) :
+- Afficher la liste de toutes les tâches (Identifiant, Titre, Description, Deadline, Statut) :
 
     - Trier les tâches par ordre alphabétique.
 
@@ -33,17 +33,17 @@ L’application doit avoir un menu qui vous permet de :
 
 - Rechercher les Tâches :
 
-    Rechercher une tâche par son Identifiant.
+    - Rechercher une tâche par son Identifiant.
 
-    Rechercher une tâche par son Titre
+    - Rechercher une tâche par son Titre
 
 - Statistiques :
 
-    Afficher le nombre total des tâches.
+    - Afficher le nombre total des tâches.
 
-    Afficher le nombre de tâches complètes et incomplètes.
+    - Afficher le nombre de tâches complètes et incomplètes.
 
-    Afficher le nombre de jours restants jusqu'au délai de chaque tâche.
+    - Afficher le nombre de jours restants jusqu'au délai de chaque tâche.
 
 
 ## Bonus:
