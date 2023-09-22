@@ -14,8 +14,7 @@ struct task {
     int Id_task;
     char title[50];
     char description[100];
-    Date start_date;
-    Date end_date;
+    Date deadline;
     int statut;
 };
 typedef struct task Task;
@@ -45,16 +44,11 @@ void add_tasks(Task *T, int *N){
 
         printf("Saisir la description de la tache: ");
         gets(T[i].description);
-        
-        do{
-        printf("Saisir la date de debut de la tache: (jj-mm-aaaa) ");
-        scanf("%d-%d-%d", &T[i].start_date.day, &T[i].start_date.month, &T[i].start_date.year);
-		}while(T[i].start_date.day > 31 || T[i].start_date.month > 12 || T[i].start_date.year > 2050);
 
         do{
-        printf("Saisir la date de fin de la tache: (jj-mm-aaaa) ");
-        scanf("%d-%d-%d", &T[i].end_date.day, &T[i].end_date.month, &T[i].end_date.year);
-		}while(T[i].end_date.day > 31 || T[i].end_date.month > 12 || T[i].end_date.year > 2050);
+        printf("Saisir la deadline de la tache: (jj-mm-aaaa) ");
+        scanf("%d-%d-%d", &T[i].deadline.day, &T[i].deadline.month, &T[i].deadline.year);
+		}while(T[i].deadline.day > 31 || T[i].deadline.month > 12 || T[i].deadline.year > 2050);
 		
 		do{
 			printf("Saisir le statut de la tache: (0 pour A realiser, 1 pour en cours de realisation, 2 pour finalisee) ");
@@ -79,8 +73,7 @@ void show_task(Task task) {
     printf("\nIdentifiant de la tache: %d\n", task.Id_task);
     printf("Titre de la tache: %s\n", task.title);
     printf("Description de la tache: %s\n", task.description);
-    printf("Date de debut: %d-%d-%d\n", task.start_date.day, task.start_date.month, task.start_date.year);
-    printf("Date de fin: %d-%d-%d\n", task.end_date.day, task.end_date.month, task.end_date.year);
+    printf("Deadline: %d-%d-%d\n", task.deadline.day, task.deadline.month, task.deadline.year);
     
     switch (task.statut) {
         case 0:
@@ -122,21 +115,21 @@ void sort_by_alphabet(Task *T, int N){
 }
 
 //calculer le delai d'une tache
-int deadline(Task task) {
-    int days1 = task.start_date.year * 365 + task.start_date.month * 30 + task.start_date.day;
-    int days2 = task.end_date.year * 365 + task.end_date.month * 30 + task.end_date.day;
+int deadline(Task task, Date current_date) {
+    int days1 = current_date.year * 365 + current_date.month * 30 + current_date.day;
+    int days2 = task.deadline.year * 365 + task.deadline.month * 30 + task.deadline.day;
 
     int difference = labs(days2 - days1);
     return difference;
 }
 
 //Trier les taches par deadline
-void sort_by_deadline(Task *T, int N){
+void sort_by_deadline(Task *T, int N, Date current_date){
 	int i,j;
 	Task tmp;
 	for(i = 0; i < N - 1; i++)
 		for (j = 0; j < N - i - 1; j++){
-			if(deadline(T[j]) > deadline(T[j+1])){
+			if(deadline(T[j], current_date) > deadline(T[j+1], current_date)){
 				tmp = T[j];
 				T[j] = T[j+1];
 				T[j+1] = tmp;
@@ -146,10 +139,10 @@ void sort_by_deadline(Task *T, int N){
 }
 
 //Afficher les taches dont le deadline est dans 3 jours ou moins
-void display_tasks_within_three_days(Task *T, int N){
+void display_tasks_within_three_days(Task *T, int N, Date current_date){
 	int i;
 	for(i = 0; i < N; i++){
-		if(deadline(T[i]) <= 3){
+		if(deadline(T[i], current_date) <= 3){
 			show_task(T[i]);
 		}
 	}
@@ -174,7 +167,7 @@ void search_by_id(Task *T, int N, int id){
 	if(S < N && S != -1){
 		show_task(T[S]);
 	} else{
-		printf("Tache non trouve!!");
+		printf("\nTache non trouve!!");
 	}
 }
 
@@ -187,7 +180,7 @@ void search_by_title(Task *T, int N, char title[50]){
 	if(i < N && i != -1){
 		show_task(T[i]);
 	} else{
-		printf("Tache non trouve!!");
+		printf("\nTache non trouve!!");
 	}
 }
 
@@ -196,13 +189,13 @@ void edit_description(Task *T, int N, int id){
 	int S = find_task(T, N, id);
     if (S < N && S != -1) {
 		char new_description[100];
-	    printf("Saisir la nouvelle description de la tache: ");
+	    printf("\nSaisir la nouvelle description de la tache: ");
 	    getchar();
 	    gets(new_description);
 	    strcpy(T[S].description, new_description);
 		show_task(T[S]);
     } else {
-        printf("Tache non trouve!!");
+        printf("\nTache non trouve!!");
     }
 }
 
@@ -211,12 +204,12 @@ void edit_statut(Task *T, int N, int id){
     int S = find_task(T, N, id);
     if (S < N && S != -1) {
         int new_statut;
-        printf("Saisir le nouveau statut de la tache: (0 pour A realiser, 1 pour en cours de realisation, 2 pour finalisee) ");
+        printf("\nSaisir le nouveau statut de la tache: (0 pour A realiser, 1 pour en cours de realisation, 2 pour finalisee) ");
         scanf("%d", &new_statut);
         T[S].statut = new_statut;
 		show_task(T[S]);
     } else {
-        printf("Tache non trouve!!");
+        printf("\nTache non trouve!!");
     }
 }
 
@@ -225,14 +218,14 @@ void edit_deadline(Task *T, int N, int id){
 	int S = find_task(T, N, id);
     if (S < N && S != -1) {
         Date new_deadline;
-        printf("Saisir la nouvelle date de fin de la tache: (jj-mm-aaaa) ");
+        printf("\nSaisir la nouvelle deadline de la tache: (jj-mm-aaaa) ");
         scanf("%d-%d-%d", &new_deadline.day, &new_deadline.month, &new_deadline.year);
-        T[S].end_date.day = new_deadline.day;
-        T[S].end_date.month = new_deadline.month;
-        T[S].end_date.year = new_deadline.year;
+        T[S].deadline.day = new_deadline.day;
+        T[S].deadline.month = new_deadline.month;
+        T[S].deadline.year = new_deadline.year;
 		show_task(T[S]);
     } else {
-        printf("Tache non trouve!!");
+        printf("\nTache non trouve!!");
     }
 }
 
@@ -264,18 +257,18 @@ void show_completed_incompleted_tasks(Task *T, int N) {
             incompleted++;
         }
     }
-    printf("Nombre de taches completes : %d\n", completed);
+    printf("\nNombre de taches completes : %d\n", completed);
     printf("Nombre de taches incompletes : %d\n", incompleted);
 }
 
 // Afficher le nombre de jours restants jusqu'au delai de chaque tache
-void show_days_remaining(Task *T, int N) {
+void show_days_remaining(Task *T, int N, Date current_date) {
 	int i;
     for (i = 0; i < N; i++) {
-        if (deadline(T[i]) >= 0) {
-            printf("Tache %d : Jours restants jusqu'au delai : %d\n", T[i].Id_task, deadline(T[i]));
+        if (deadline(T[i], current_date) >= 0) {
+            printf("\nTache %d : Jours restants jusqu'au delai : %d\n", T[i].Id_task, deadline(T[i], current_date));
         } else {
-            printf("Tache %d : Delai depasse de %d jours\n", T[i].Id_task, deadline(T[i]));
+            printf("Tache %d : Delai depasse de %d jours\n", T[i].Id_task, deadline(T[i], current_date));
         }
     }
 }

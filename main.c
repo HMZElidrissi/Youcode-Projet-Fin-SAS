@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "main.h"
 
 int main(){
@@ -7,6 +8,14 @@ int main(){
 	int N = 0;
 	int id;
 	Task *T;
+	
+	time_t now = time(NULL);
+	struct tm *tm = localtime(&now);
+	
+	Date current_date;
+	current_date.day = tm->tm_mday;
+	current_date.month = tm->tm_mon + 1;
+	current_date.year = tm->tm_year + 1900;
 	
 	do{
 		printf("\nChoisir votre mode d'utilisation (Saisir le nombre): \n");
@@ -33,9 +42,9 @@ int main(){
 				if(operation == 1){
 					sort_by_alphabet(T, N);
 				} else if(operation == 2){
-					sort_by_deadline(T, N);
+					sort_by_deadline(T, N, current_date);
 				} else if(operation == 3){
-					display_tasks_within_three_days(T, N);
+					display_tasks_within_three_days(T, N, current_date);
 				} else if(operation == 0){
 					mode = 0;
 				} else{
@@ -105,7 +114,7 @@ int main(){
 				} else if(operation == 2){
 					show_completed_incompleted_tasks(T, N);
 				} else if(operation == 3){
-					show_days_remaining(T, N);
+					show_days_remaining(T, N, current_date);
 				} else if(operation == 0){
 					mode = 0;
 				} else{
