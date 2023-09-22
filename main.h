@@ -44,7 +44,6 @@ void add_tasks(Task *T, int *N){
 		gets(T[i].title);
 
         printf("Saisir la description de la tache: ");
-        getchar();
         gets(T[i].description);
         
         do{
@@ -77,7 +76,7 @@ void add_tasks(Task *T, int *N){
 
 //Afficher une tache
 void show_task(Task task) {
-    printf("Identifiant de la tache: %d\n", task.Id_task);
+    printf("\nIdentifiant de la tache: %d\n", task.Id_task);
     printf("Titre de la tache: %s\n", task.title);
     printf("Description de la tache: %s\n", task.description);
     printf("Date de debut: %d-%d-%d\n", task.start_date.day, task.start_date.month, task.start_date.year);
