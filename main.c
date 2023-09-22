@@ -8,6 +8,7 @@ int main(){
 	int N = 0;
 	int id;
 	Task *T;
+	T = (Task *)malloc(sizeof(Task));
 	
 	time_t now = time(NULL);
 	struct tm *tm = localtime(&now);
@@ -29,7 +30,6 @@ int main(){
 		scanf("%d", &mode);
 		switch(mode){
 			case 1:
-				T = (Task *)malloc(sizeof(Task));
 				add_tasks(T, &N);
 				break;
 			case 2:
@@ -50,6 +50,7 @@ int main(){
 				} else{
 					printf("\nChoix Invalide.\n");
 				}
+				
 				break;
 			case 3:
 				printf("Choisir votre mode d'utilisation (Saisir le nombre): \n");
@@ -75,11 +76,13 @@ int main(){
 				} else{
 					printf("\nChoix Invalide.\n");
 				}
+				
 				break;
 			case 4:
 				printf("Choisir la tache que vous voulez supprimer (Saisir l'identifiant): \n");
 				scanf("%d", &id);
 				delete_by_id(T, &N, id);
+				
 				break;
 			case 5:
 				printf("Choisir votre mode d'utilisation (Saisir le nombre): \n");
@@ -94,13 +97,15 @@ int main(){
 				} else if(operation == 2){
 					printf("Saisir le titre: \n");
 					char title_to_search[50];
-					scanf("%s", title_to_search);
+					getchar();
+					gets(title_to_search);
 					search_by_title(T, N, title_to_search);
 				} else if(operation == 0){
 					mode = 0;
 				} else{
 					printf("\nChoix Invalide.\n");
 				}
+				
 				break;
 			case 6:
 				printf("Choisir votre mode d'utilisation (Saisir le nombre): \n");
@@ -120,6 +125,7 @@ int main(){
 				} else{
 					printf("\nChoix Invalide.\n");
 				}
+				
 				break;
 			default:
 				printf("\nChoix Invalide.\n");

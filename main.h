@@ -21,17 +21,17 @@ typedef struct task Task;
 
 //Ajouter nouvelles taches
 void add_tasks(Task *T, int *N){
-	int flag, i, j;
+	int new_task;
+	int flag, i;
 	T = (Task *)realloc(T, ((*N) + 1) * sizeof(Task));
-	i = *N;
-    while(1) {
+    do{
         do{
         	//On commence par le Id_task en respectant la condition qu'il soit unique
         	printf("\nSaisir l'identifiant du tache: ");
-        	scanf("%d", &T[i].Id_task);
+        	scanf("%d", &T[*N].Id_task);
         	flag = 0;
-        	for(j = 0; j < i; j++){
-        		if(T[j].Id_task == T[i].Id_task){
+        	for(i = 0; i < *N; i++){
+        		if(T[i].Id_task == T[*N].Id_task){
         			flag = 1;
         			break;
 				}
@@ -40,32 +40,26 @@ void add_tasks(Task *T, int *N){
 		
 		printf("Saisir le titre de la tache: ");
 		getchar();
-		gets(T[i].title);
+		gets(T[*N].title);
 
         printf("Saisir la description de la tache: ");
-        gets(T[i].description);
+        gets(T[*N].description);
 
         do{
         printf("Saisir la deadline de la tache: (jj-mm-aaaa) ");
-        scanf("%d-%d-%d", &T[i].deadline.day, &T[i].deadline.month, &T[i].deadline.year);
-		}while(T[i].deadline.day > 31 || T[i].deadline.month > 12 || T[i].deadline.year > 2050);
+        scanf("%d-%d-%d", &T[*N].deadline.day, &T[*N].deadline.month, &T[*N].deadline.year);
+		}while(T[*N].deadline.day > 31 || T[*N].deadline.month > 12 || T[*N].deadline.year > 2050);
 		
 		do{
 			printf("Saisir le statut de la tache: (0 pour A realiser, 1 pour en cours de realisation, 2 pour finalisee) ");
-			scanf("%d", &T[i].statut);
-		}while(T[i].statut < 0 && T[i].statut > 2);
+			scanf("%d", &T[*N].statut);
+		}while(T[*N].statut < 0 && T[*N].statut > 2);
 
 		(*N)++;
 
 		printf("\nVoulez vous ajouter une autre tache ? (1 pour Oui, 0 pour Non) : ");
-		int new_task;
         scanf("%d", &new_task);
-        if (new_task != 1) {
-            break;
-        }
-
-		i++;
-    }
+    }while(new_task == 1);
 }
 
 //Afficher une tache
